@@ -48,7 +48,7 @@ end
 parsed_results = {}
 
 begin 
-  result = `hadoop dfsadmin -report`
+  result = `hdfs dfsadmin -report`
 rescue Errorno::ENOENT
   puts "hadoop command not found, is it in your path?"
   exit 3
