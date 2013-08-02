@@ -25,12 +25,12 @@ output=`exec 3<>/dev/tcp/127.0.0.1/50030
 
 
 num_active_tt=`echo $output | tr ' ' '\012' | grep href=\"machines.jsp\?type=active\" | cut -d'>' -f 2 | cut -d'<' -f 1`
-if [ $num_active_tt -lt $warning ]; then
-  echo "WARNING - TaskTrackers up and running: $num_active_tt"
-  exit $warning_exit
-elif [ $num_active_tt -lt $critical ]; then
+if [ $num_active_tt -lt $critical ]; then
   echo "CRITICAL - TackTrackers up and running: $num_active_tt"
   exit $critical_exit
+elif [ $num_active_tt -lt $warning ]; then
+  echo "WARNING - TaskTrackers up and running: $num_active_tt"
+  exit $warning_exit
 else
   echo "OK - TaskTrackers up and running: $num_active_tt"
   exit $ok_exit
