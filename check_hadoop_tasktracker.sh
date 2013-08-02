@@ -7,15 +7,15 @@ unk_exit=3
 
 if [ -z "$1" ]; then
   echo "Warning / Critical undefined!"
-  echo "Usage: $0 warning-nuber critical-number"
+  echo "Usage: $0 warning-avail-number critical-avail-number"
   exit $unk_exit
 fi
 
 warning=$1
 critical=$2
 
-if [ ! $critical -ge $warning ]; then
-  echo "Critical must be >= Warning!"
+if [ ! $critical -le $warning ]; then
+  echo "Critical must be <= Warning!"
   exit $unk_exit
 fi
 
@@ -25,14 +25,13 @@ output=`exec 3<>/dev/tcp/127.0.0.1/50030
 
 
 num_active_tt=`echo $output | tr ' ' '\012' | grep href=\"machines.jsp\?type=active\" | cut -d'>' -f 2 | cut -d'<' -f 1`
-if [ $num_active_tt -lt $critical ]; then
-  echo "CRITICAL - TackTrackers up and running: $num_active_tt"
-  exit $critical_exit
-elif [ $num_active_tt -lt $warning ]; then
+if [ $num_active_tt -lt $warning ]; then
   echo "WARNING - TaskTrackers up and running: $num_active_tt"
   exit $warning_exit
+elif [ $num_active_tt -lt $critical ]; then
+  echo "CRITICAL - TackTrackers up and running: $num_active_tt"
+  exit $critical_exit
 else
   echo "OK - TaskTrackers up and running: $num_active_tt"
   exit $ok_exit
 fi
-
